@@ -1,0 +1,7 @@
+name: OpenAC
+version: '0.0.1'
+main: me.limhax.openAC.OpenAC
+api-version: '1.18'
+load: STARTUP
+authors: [ Limhax ]
+description: A free and open source combat anticheat.
