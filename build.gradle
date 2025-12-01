@@ -17,11 +17,17 @@ repositories {
         name = "codemc-repo"
         url = "https://repo.codemc.io/repository/maven-public/"
     }
+    maven {
+        name = "pledge-repo"
+        url = "https://raw.github.com/ThomasOM/Pledge/repository/"
+    }
 }
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.18.2-R0.1-SNAPSHOT")
     implementation("com.github.retrooper:packetevents-spigot:2.10.1")
+    implementation("dev.thomazz:pledge:3.6")
+    implementation("org.joml:joml:1.10.8")
 
     compileOnly 'org.projectlombok:lombok:1.18.34'
     annotationProcessor 'org.projectlombok:lombok:1.18.34'

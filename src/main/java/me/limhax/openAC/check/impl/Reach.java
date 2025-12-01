@@ -13,7 +13,7 @@ import me.limhax.openAC.processor.EntityTracker.EntityTrackerEntry.Location;
 
 import java.util.List;
 
-@CheckInfo(name = "Reach", type = "A", description = "test")
+@CheckInfo(name = "Reach", type = "A", description = "Hit from too far.")
 public class Reach extends Check {
 
   private boolean sentFlying = false;
@@ -48,44 +48,58 @@ public class Reach extends Check {
           .getLocationHistory();
 
       int size = locations.size();
-      if (size < 5) return;
-      List<Location> lastThree = locations.subList(Math.max(size - 3, 0), size);
+      if (size < 3) return;
 
-      double distance = getDistance(lastThree);
+      double distance = getDistance(locations);
 
       if (distance > 3) {
-        Debug.debug("d=" + distance);
+        if (this.increaseBuffer(1, 4)) {
+          fail("distance=" + distance);
+        }
+      } else {
+        decreaseBufferBy(0.03);
       }
       sentFlying = false;
     }
   }
 
   private double getDistance(List<Location> lastThree) {
-    double distance = Double.MAX_VALUE;
+    AABB combined = null;
 
     for (Location loc : lastThree) {
-      double minDistance = Double.MAX_VALUE;
       AABB box = new AABB(loc.getX(), loc.getY(), loc.getZ());
       box.add(0, 1.8 / 2, 0);
       box.expand(0.3, 1.8 / 2, 0.3);
 
-      double[] possibleEyeHeights = {0.4, 1.27, 1.62};
-      for (double eyeHeight : possibleEyeHeights) {
-        double eyeY = this.y + eyeHeight;
-
-        double closestX = Math.max(box.getMinX(), Math.min(this.x, box.getMaxX()));
-        double closestY = Math.max(box.getMinY(), Math.min(eyeY, box.getMaxY()));
-        double closestZ = Math.max(box.getMinZ(), Math.min(this.z, box.getMaxZ()));
-
-        double dx = closestX - this.x;
-        double dy = closestY - eyeY;
-        double dz = closestZ - this.z;
-        double dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
-
-        minDistance = Math.min(minDistance, dist);
+      if (combined == null) {
+        combined = box;
+      } else {
+        combined = combined.union(box);
       }
-      distance = Math.min(minDistance, distance);
     }
+
+    if (combined == null) {
+      return Double.MAX_VALUE;
+    }
+
+    double distance = Double.MAX_VALUE;
+    double[] possibleEyeHeights = {0.4, 1.27, 1.62};
+
+    for (double eyeHeight : possibleEyeHeights) {
+      double eyeY = this.y + eyeHeight;
+
+      double closestX = Math.max(combined.getMinX(), Math.min(this.x, combined.getMaxX()));
+      double closestY = Math.max(combined.getMinY(), Math.min(eyeY, combined.getMaxY()));
+      double closestZ = Math.max(combined.getMinZ(), Math.min(this.z, combined.getMaxZ()));
+
+      double dx = closestX - this.x;
+      double dy = closestY - eyeY;
+      double dz = closestZ - this.z;
+
+      double dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+      distance = Math.min(distance, dist);
+    }
+
     return distance;
   }
 }

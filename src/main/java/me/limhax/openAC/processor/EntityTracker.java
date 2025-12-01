@@ -4,11 +4,9 @@ import com.github.retrooper.packetevents.event.PacketSendEvent;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.wrapper.play.server.*;
 import lombok.Getter;
-import me.limhax.openAC.OpenAC;
 import me.limhax.openAC.data.PlayerData;
 
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 @Getter
 public class EntityTracker {
@@ -20,11 +18,11 @@ public class EntityTracker {
   }
 
   @Getter
-  public static class EntityTrackerEntry {
+  public class EntityTrackerEntry {
     private double x;
     private double y;
     private double z;
-    private final Deque<Location> locationHistory = new ArrayDeque<>(20);
+    private final Deque<Location> locationHistory = new ArrayDeque<>(3);
 
     @Getter
     public static class Location {
@@ -49,28 +47,28 @@ public class EntityTracker {
     }
 
     private void addLocationToHistory(double x, double y, double z) {
-      if (locationHistory.size() >= 20) {
+      if (locationHistory.size() >= 3) {
         locationHistory.pollFirst();
       }
       locationHistory.offerLast(new Location(x, y, z));
     }
 
     public void move(double deltaX, double deltaY, double deltaZ) {
-      OpenAC.getInstance().getExecutor().schedule(() -> {
+      data.getConnectionProcessor().runOnPong(() -> {
       this.x += deltaX;
       this.y += deltaY;
       this.z += deltaZ;
       addLocationToHistory(this.x, this.y, this.z);
-      },  35, TimeUnit.MILLISECONDS);
+      });
     }
 
     public void teleport(double x, double y, double z) {
-      OpenAC.getInstance().getExecutor().schedule(() -> {
+      data.getConnectionProcessor().runOnPong(() -> {
       this.x = x;
       this.y = y;
       this.z = z;
       addLocationToHistory(x, y, z);
-      },  50, TimeUnit.MILLISECONDS);
+      });
     }
 
     public List<Location> getLocationHistory() {

@@ -43,12 +43,23 @@ public abstract class Check {
     return buffer > maxBuffer;
   }
 
+  protected boolean increaseBuffer(double amount, double max) {
+    //Debug.debug("verbosed " + this.getName() + " " + this.getType() + " " + (buffer / max) * 100 + "%");
+    buffer += amount;
+    return buffer > max;
+  }
+
   protected void decreaseBuffer() {
     buffer = Math.max(0, buffer - bufferDecay);
   }
 
+  protected void decreaseBufferBy(double amount) {
+    buffer = Math.max(0, buffer - amount);
+  }
+
   protected void fail(String info) {
-    Debug.debug(info);
+    Debug.debug(this.player.getName() + " failed " + this.name + " " + this.type + " (" + info + ")");
+    buffer = 0;
   }
 
   public abstract void onReceive(PacketReceiveEvent event);
