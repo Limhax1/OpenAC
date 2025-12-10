@@ -22,7 +22,7 @@ public class FlightA extends Check {
         data.getCollisionProcessor().hasCollision("ladder") ||
         data.getCollisionProcessor().hasCollision("scaffolding") ||
         data.getCollisionProcessor().getSinceVerticalTop() < 3 ||
-        data.getMovementProcessor().getSinceTeleport() < 3 ||
+        data.getMovementProcessor().getSinceTeleport() < 4 ||
         data.getCollisionProcessor().hasCollision("vine") ||
         data.getPlayer().isFlying()) {
       return;
@@ -65,7 +65,7 @@ public class FlightA extends Check {
     final double diff = Math.abs(predicted - deltaY);
     if (diff > 1E-7) {
       if (increaseBuffer(1, 3)) {
-        fail("diff=" + diff + " pred=" + predicted + " delta=" + deltaY + " at=" + airTicks + " vel=" + velTicks + " last=" + lastDeltaY);
+        fail("diff=" + diff + " pred=" + predicted + " delta=" + deltaY + " at=" + airTicks + " vel=" + velTicks + " last=" + lastDeltaY + " tp=" + data.getMovementProcessor().getSinceTeleport());
       } else {
         decreaseBufferBy(0.035);
       }

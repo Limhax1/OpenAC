@@ -24,7 +24,7 @@ public class VelocityB extends Check {
         data.getCollisionProcessor().hasCollision("water") ||
         data.getCollisionProcessor().hasCollision("lava") ||
         data.getCollisionProcessor().hasCollision("ladder") ||
-        data.getMovementProcessor().getSinceTeleport() < 3 ||
+        data.getMovementProcessor().getSinceTeleport() < 4 ||
         data.getCollisionProcessor().hasCollision("vine")) {
       return;
     }

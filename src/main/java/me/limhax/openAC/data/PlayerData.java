@@ -84,6 +84,7 @@ public class PlayerData {
     entityTracker.onSend(event);
     worldProcessor.onSend(event);
     velocityProcessor.onSend(event);
+    movementProcessor.onSend(event);
 
     for (Check check : checks) {
       check.onSend(event);

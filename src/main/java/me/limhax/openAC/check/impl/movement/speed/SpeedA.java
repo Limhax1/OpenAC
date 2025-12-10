@@ -24,7 +24,7 @@ public class SpeedA extends Check {
         data.getCollisionProcessor().hasCollision("lava") ||
         data.getCollisionProcessor().hasCollision("ladder") ||
         data.getCollisionProcessor().hasCollision("vine") ||
-        data.getMovementProcessor().getSinceTeleport() < 3 ||
+        data.getMovementProcessor().getSinceTeleport() < 4 ||
         data.getPlayer().isFlying()) {
       return;
     }

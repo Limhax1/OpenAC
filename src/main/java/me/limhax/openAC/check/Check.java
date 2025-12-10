@@ -54,10 +54,10 @@ public abstract class Check {
   }
 
   protected boolean increaseBuffer(double amount, double max) {
-    String format = "%prefix% &f%player% &7verbosed &b%check% %type% %dev% &7[x&b%percent%&7]";
+    String format = "%prefix% &f%player% &7verbosed &f%check% &7(&f%type%&7) %dev% &7[&4%percent%%&7]";
 
     format = format
-        .replace("%prefix%", "&7[&b&lAC&7]")
+        .replace("%prefix%", "&4&lVulcan &8»")
         .replace("%player%", this.getPlayer().getName())
         .replace("%check%", this.getName())
         .replace("%dev%", this.isExperimental() ? "*" : "")
@@ -89,10 +89,10 @@ public abstract class Check {
 
   protected void fail(String info) {
     ++vl;
-    String format = "%prefix% &f%player% &7failed &b%check% %dev%%type%%dev% &7[x&b%vl%&7]";
+    String format = "%prefix% &f%player% &7failed &f%check% %dev%&7(&fType %type%&7)&f%dev% &7[&4%vl%&7/&4%max-vl%&7]";
 
     format = format
-        .replace("%prefix%", "&7[&b&lAntiCheat&7]")
+        .replace("%prefix%", "&4&lVulcan &8»")
         .replace("%player%", this.getPlayer().getName())
         .replace("%check%", this.getName())
         .replace("%dev%", this.isExperimental() ? "*" : "")
