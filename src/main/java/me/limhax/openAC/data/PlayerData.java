@@ -12,6 +12,7 @@ import me.limhax.openAC.check.impl.combat.reach.Reach;
 import me.limhax.openAC.check.impl.combat.velocity.VelocityA;
 import me.limhax.openAC.check.impl.combat.velocity.VelocityB;
 import me.limhax.openAC.check.impl.movement.flight.FlightA;
+import me.limhax.openAC.check.impl.movement.flight.FlightB;
 import me.limhax.openAC.check.impl.movement.speed.SpeedA;
 import me.limhax.openAC.check.impl.movement.speed.SpeedB;
 import me.limhax.openAC.check.impl.movement.speed.SpeedC;
@@ -57,6 +58,7 @@ public class PlayerData {
     checks.add(new VelocityB(this));
 
     checks.add(new FlightA(this));
+    checks.add(new FlightB(this));
 
     checks.add(new AimA(this));
     checks.add(new AimB(this));
