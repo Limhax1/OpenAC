@@ -22,6 +22,7 @@ public class FlightA extends Check {
         data.getCollisionProcessor().hasCollision("ladder") ||
         data.getCollisionProcessor().hasCollision("scaffolding") ||
         data.getCollisionProcessor().getSinceVerticalTop() < 3 ||
+        data.getMovementProcessor().getSinceTeleport() < 3 ||
         data.getCollisionProcessor().hasCollision("vine") ||
         data.getPlayer().isFlying()) {
       return;

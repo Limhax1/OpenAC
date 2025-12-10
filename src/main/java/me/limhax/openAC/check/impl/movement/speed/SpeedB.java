@@ -17,6 +17,7 @@ public class SpeedB extends Check {
     if (!Packet.isPos(event)) return;
     if (data.getMovementProcessor().isOnGround()) return;
     if (data.getPlayer().isFlying()) return;
+    if (data.getMovementProcessor().getSinceTeleport() < 3) return;
 
     final double deltaXZ = data.getMovementProcessor().getDeltaXZ();
     final double lastDeltaXZ = data.getVelocityProcessor().getSinceVelocity() == 1 ? data.getVelocityProcessor().getVelocityXZ() : data.getMovementProcessor().getLastDeltaXZ();

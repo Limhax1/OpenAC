@@ -27,6 +27,7 @@ public class SpeedC extends Check {
         data.getCollisionProcessor().hasCollision("vine") ||
         data.getCollisionProcessor().hasCollision("ice") ||
         data.getCollisionProcessor().hasCollision("slime") ||
+        data.getMovementProcessor().getSinceTeleport() < 3 ||
         data.getPlayer().isFlying()) {
       return;
     }

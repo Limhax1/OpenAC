@@ -19,6 +19,7 @@ public class FlightB extends Check {
     WrapperPlayClientPlayerFlying flying = new WrapperPlayClientPlayerFlying(event);
     if (data.getMovementProcessor().isDuplicatePosition()) return;
     if (data.getMovementProcessor().isLastZeroPointZeroThree()) return;
+    if (data.getMovementProcessor().getSinceTeleport() < 3) return;
 
     final boolean clientGround = flying.isOnGround();
     final boolean serverGround = flying.getLocation().getY() % ((double) 1 / 64) <= 1E-7;
