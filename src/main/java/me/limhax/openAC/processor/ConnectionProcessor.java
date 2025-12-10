@@ -9,13 +9,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-/**
- * Handles lag compensation using Pledge's ping/transaction tracking system.
- * 
- * Pledge sends ping packets at the start and end of each server tick.
- * When the client responds to these pings, we know they've processed all
- * data sent before that ping (TCP guarantees ordered delivery).
- */
 public class ConnectionProcessor {
   private final PlayerData data;
 

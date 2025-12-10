@@ -5,6 +5,6 @@ import org.bukkit.ChatColor;
 
 public class Debug {
   public static void debug(String message) {
-    Bukkit.broadcastMessage(ChatColor.AQUA + "[!] " + ChatColor.GRAY + message);
+    Bukkit.broadcastMessage(ChatColor.DARK_RED + "[!] " + ChatColor.WHITE + message);
   }
 }
