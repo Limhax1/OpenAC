@@ -1,0 +1,21 @@
+messages:
+  alert:
+    format: "%prefix% &b%player% &7failed &f%check% &f%dev%&7(&fType %type%&7)&f%dev% &7[&b%vl%&7/&b%max-vl%&7]"
+    prefix: "&bAntiCheat &8»"
+  verbose:
+    format: "%prefix% &f%player% &7verbosed &f%check% &7(&f%type%&7) %dev% &7[&b%percent%%&7]"
+    prefix: "&bAntiCheat &8»"
+  commands:
+    alerts:
+      enabled: "&aAlerts enabled."
+      disabled: "&cAlerts disabled."
+      no-permission: "&cYou do not have permission to use this command."
+    verbose:
+      enabled: "&aVerbose enabled."
+      disabled: "&cVerbose disabled."
+      no-permission: "&cYou do not have permission to use this command."
+    reload:
+      success: "&aConfig reloaded successfully."
+      error: "&cError reloading config: %error%"
+      no-permission: "&cYou do not have permission to use this command."
+

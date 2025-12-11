@@ -5,7 +5,9 @@ import com.github.retrooper.packetevents.event.PacketSendEvent;
 import com.github.retrooper.packetevents.util.ColorUtil;
 import io.github.retrooper.packetevents.adventure.serializer.legacy.LegacyComponentSerializer;
 import lombok.Getter;
+import me.limhax.openAC.OpenAC;
 import me.limhax.openAC.check.annotation.CheckInfo;
+import me.limhax.openAC.config.ConfigManager;
 import me.limhax.openAC.data.PlayerData;
 import me.limhax.openAC.util.Debug;
 import me.limhax.openAC.util.MathHelper;
@@ -54,10 +56,11 @@ public abstract class Check {
   }
 
   protected boolean increaseBuffer(double amount, double max) {
-    String format = "%prefix% &f%player% &7verbosed &f%check% &7(&f%type%&7) %dev% &7[&4%percent%%&7]";
+    ConfigManager config = OpenAC.getInstance().getConfigManager();
+    String format = config.getVerboseFormat();
 
     format = format
-        .replace("%prefix%", "&4&lVulcan &8»")
+        .replace("%prefix%", config.getVerbosePrefix())
         .replace("%player%", this.getPlayer().getName())
         .replace("%check%", this.getName())
         .replace("%dev%", this.isExperimental() ? "*" : "")
@@ -72,7 +75,10 @@ public abstract class Check {
         ));
 
     for (Player player1 : Bukkit.getOnlinePlayers()) {
-      //player1.sendMessage(message);
+      PlayerData playerData = OpenAC.getInstance().getListener().getPlayerDataMap().get(player1.getEntityId());
+      if (playerData != null && playerData.isVerboseEnabled()) {
+        player1.sendMessage(message);
+      }
     }
 
     buffer += amount;
@@ -89,10 +95,11 @@ public abstract class Check {
 
   protected void fail(String info) {
     ++vl;
-    String format = "%prefix% &f%player% &7failed &f%check% %dev%&7(&fType %type%&7)&f%dev% &7[&4%vl%&7/&4%max-vl%&7]";
+    ConfigManager config = OpenAC.getInstance().getConfigManager();
+    String format = config.getAlertFormat();
 
     format = format
-        .replace("%prefix%", "&4&lVulcan &8»")
+        .replace("%prefix%", config.getAlertPrefix())
         .replace("%player%", this.getPlayer().getName())
         .replace("%check%", this.getName())
         .replace("%dev%", this.isExperimental() ? "*" : "")
@@ -106,7 +113,10 @@ public abstract class Check {
         ));
 
     for (Player player1 : Bukkit.getOnlinePlayers()) {
-      player1.sendMessage(message);
+      PlayerData playerData = OpenAC.getInstance().getListener().getPlayerDataMap().get(player1.getEntityId());
+      if (playerData != null && playerData.isAlertsEnabled()) {
+        player1.sendMessage(message);
+      }
     }
     buffer = 0;
   }

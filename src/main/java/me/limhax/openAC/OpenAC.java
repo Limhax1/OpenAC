@@ -6,7 +6,10 @@ import dev.thomazz.pledge.pinger.ClientPinger;
 import dev.thomazz.pledge.pinger.ClientPingerListener;
 import dev.thomazz.pledge.pinger.ClientPingerOptions;
 import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder;
+import co.aikar.commands.PaperCommandManager;
 import lombok.Getter;
+import me.limhax.openAC.command.CommandManager;
+import me.limhax.openAC.config.ConfigManager;
 import me.limhax.openAC.data.PlayerData;
 import me.limhax.openAC.listener.Listener;
 import org.bukkit.entity.Player;
@@ -26,6 +29,10 @@ public final class OpenAC extends JavaPlugin implements ClientPingerListener {
   private Pledge pledge;
   @Getter
   private ClientPinger pinger;
+  @Getter
+  private ConfigManager configManager;
+  @Getter
+  private PaperCommandManager commandManager;
 
   @Override
   public void onLoad() {
@@ -37,6 +44,11 @@ public final class OpenAC extends JavaPlugin implements ClientPingerListener {
 
   @Override
   public void onEnable() {
+    saveDefaultConfig();
+    this.configManager = new ConfigManager();
+    this.commandManager = new PaperCommandManager(this);
+    this.commandManager.registerCommand(new CommandManager());
+
     PacketEvents.getAPI().init();
 
     this.pledge = Pledge.getOrCreate(this);

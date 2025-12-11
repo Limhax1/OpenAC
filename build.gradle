@@ -21,6 +21,10 @@ repositories {
         name = "pledge-repo"
         url = "https://raw.github.com/ThomasOM/Pledge/repository/"
     }
+    maven {
+        name = "aikar"
+        url = "https://repo.aikar.co/content/groups/aikar/"
+    }
 }
 
 dependencies {
@@ -30,6 +34,7 @@ dependencies {
     implementation("org.joml:joml:1.10.8")
     implementation "net.kyori:adventure-api:4.25.0"
     implementation "net.kyori:adventure-platform-bukkit:4.4.1"
+    implementation("co.aikar:acf-paper:0.5.1-SNAPSHOT")
 
     compileOnly 'org.projectlombok:lombok:1.18.34'
     annotationProcessor 'org.projectlombok:lombok:1.18.34'
@@ -45,6 +50,8 @@ tasks {
 
     shadowJar {
         relocate("com.github.retrooper.packetevents", "me.limhax.packetevents")
+        relocate("co.aikar.commands", "me.limhax.acf")
+        relocate("co.aikar.locales", "me.limhax.acf.locales")
     }
 }
 

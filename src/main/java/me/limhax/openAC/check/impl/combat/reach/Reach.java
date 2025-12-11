@@ -23,7 +23,7 @@ public class Reach extends Check {
     if (Packet.isInteract(event)) {
       WrapperPlayClientInteractEntity wrapper = new WrapperPlayClientInteractEntity(event);
       if (wrapper.getAction() != WrapperPlayClientInteractEntity.InteractAction.ATTACK) return;
-
+      if (data.getMovementProcessor().getSinceTeleport() < 5) return;
       int entityId = wrapper.getEntityId();
       TrackingProcessor.TrackedEntity entry = data.getEntityTracker().getTracked().get(entityId);
       if (entry == null) return;

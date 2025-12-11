@@ -4,4 +4,4 @@ main: me.limhax.openAC.OpenAC
 api-version: '1.18'
 load: STARTUP
 authors: [ Limhax ]
-description: A free and open source combat anticheat.
+description: A free and open source anticheat I made because I was bored, nothing special.

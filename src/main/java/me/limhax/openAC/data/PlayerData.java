@@ -9,6 +9,7 @@ import me.limhax.openAC.check.impl.combat.aim.AimB;
 import me.limhax.openAC.check.impl.combat.aim.AimC;
 import me.limhax.openAC.check.impl.combat.reach.Hitbox;
 import me.limhax.openAC.check.impl.combat.reach.Reach;
+import me.limhax.openAC.check.impl.combat.reach.ReachB;
 import me.limhax.openAC.check.impl.combat.velocity.VelocityA;
 import me.limhax.openAC.check.impl.combat.velocity.VelocityB;
 import me.limhax.openAC.check.impl.movement.flight.FlightA;
@@ -34,6 +35,18 @@ public class PlayerData {
   private ConnectionProcessor connectionProcessor;
   private VelocityProcessor velocityProcessor;
   private CombatProcessor combatProcessor;
+  @Getter
+  private boolean alertsEnabled = true;
+  @Getter
+  private boolean verboseEnabled = false;
+
+  public void setAlertsEnabled(boolean alertsEnabled) {
+    this.alertsEnabled = alertsEnabled;
+  }
+
+  public void setVerboseEnabled(boolean verboseEnabled) {
+    this.verboseEnabled = verboseEnabled;
+  }
 
   public PlayerData(Player player) {
     this.player = player;
@@ -48,6 +61,7 @@ public class PlayerData {
     this.combatProcessor = new CombatProcessor(this);
 
     checks.add(new Reach(this));
+    checks.add(new ReachB(this));
     checks.add(new Hitbox(this));
 
     checks.add(new SpeedA(this));

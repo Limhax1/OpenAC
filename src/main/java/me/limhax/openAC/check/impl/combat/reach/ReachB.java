@@ -8,20 +8,25 @@ import me.limhax.openAC.check.annotation.CheckInfo;
 import me.limhax.openAC.data.PlayerData;
 import me.limhax.openAC.processor.TrackingProcessor;
 import me.limhax.openAC.util.AABB;
+import me.limhax.openAC.util.Debug;
 import me.limhax.openAC.util.MinecraftMath;
 import me.limhax.openAC.util.Packet;
+import org.bukkit.ChatColor;
 import org.joml.Vector3d;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@CheckInfo(name = "Hitbox", type = "A", description = "Invalid hit angle.", experimental = true)
-public class Hitbox extends Check {
+@CheckInfo(name = "Reach", type = "B", description = "Hit from too far.", experimental = true)
+public class ReachB extends Check {
 
-  private final static double[] possibleEyeHeights = {1.62F, 1.27F, 0.4F};
+  private static final double[] POSSIBLE_EYE_HEIGHTS = {1.62, 1.27, 0.4};
+  private static final double MAX_REACH = 3.0;
+  private static final double RAYTRACE_DISTANCE = 6.0;
+  
   private final Map<Integer, AttackData> queue = new HashMap<>();
 
-  public Hitbox(PlayerData data) {
+  public ReachB(PlayerData data) {
     super(data);
   }
 
@@ -59,71 +64,61 @@ public class Hitbox extends Check {
       if (e == null) continue;
 
       AABB targetBox = attackData.targetBox;
-
+      
       var rot = data.getRotationProcessor();
       float yaw = rot.getYaw();
       float pitch = rot.getPitch();
       float lastYaw = rot.getLastYaw();
       float lastPitch = rot.getLastPitch();
 
-      double minOffset = Double.MAX_VALUE;
+      double minDistance = Double.MAX_VALUE;
 
-      for (double eyeHeight : possibleEyeHeights) {
-        Vector3d eye = new Vector3d(
-            attackData.position.x,
-            attackData.position.y + eyeHeight,
-            attackData.position.z
-        );
+      double currentDistance = calculateRaytraceDistance(
+          attackData.position, targetBox, yaw, pitch
+      );
+      minDistance = Math.min(minDistance, currentDistance);
 
-        Vector3d lookVector = MinecraftMath.getLookVector(yaw, pitch);
-        Vector3d lookEnd = new Vector3d(eye).add(lookVector.mul(6.0, new Vector3d()));
-        Vector3d intercept = MinecraftMath.calculateIntercept(targetBox, eye, lookEnd);
+      double lastDistance = calculateRaytraceDistance(
+          attackData.position, targetBox, lastYaw, lastPitch
+      );
+      minDistance = Math.min(minDistance, lastDistance);
 
-        if (intercept != null) {
-          minOffset = 0.0;
-          break;
-        }
-
-        Vector3d closestPointOnBox = getClosestPoint(targetBox, eye);
-        Vector3d toTarget = new Vector3d(closestPointOnBox).sub(eye).normalize();
-        double dotProduct = lookVector.dot(toTarget);
-        dotProduct = Math.max(-1.0, Math.min(1.0, dotProduct));
-        double offset = Math.toDegrees(Math.acos(dotProduct));
-        minOffset = Math.min(minOffset, offset);
-
-        Vector3d lastLookVector = MinecraftMath.getLookVector(lastYaw, lastPitch);
-        Vector3d lastLookEnd = new Vector3d(eye).add(lastLookVector.mul(6.0, new Vector3d()));
-        Vector3d lastIntercept = MinecraftMath.calculateIntercept(targetBox, eye, lastLookEnd);
-
-        if (lastIntercept != null) {
-          minOffset = 0.0;
-          break;
-        }
-
-        double lastDotProduct = lastLookVector.dot(toTarget);
-        lastDotProduct = Math.max(-1.0, Math.min(1.0, lastDotProduct));
-        double lastOffset = Math.toDegrees(Math.acos(lastDotProduct));
-        minOffset = Math.min(minOffset, lastOffset);
-      }
-
-      if (minOffset > 0.0) {
-        if (increaseBuffer(1, 2)) {
-          fail("offset=" + minOffset);
+      if (minDistance > MAX_REACH && minDistance != Double.MAX_VALUE) {
+        //Debug.debug(ChatColor.GREEN + "distance=" + minDistance);
+        if (increaseBuffer(1, 1)) {
+          fail("distance=" + minDistance);
         }
       } else {
-        decreaseBufferBy(0.035);
+        //Debug.debug(ChatColor.GRAY + "distance=" + minDistance);
+        decreaseBufferBy(0.02);
       }
     }
 
     queue.clear();
   }
 
-  private Vector3d getClosestPoint(AABB box, Vector3d point) {
-    double closestX = Math.max(box.getMinX(), Math.min(point.x, box.getMaxX()));
-    double closestY = Math.max(box.getMinY(), Math.min(point.y, box.getMaxY()));
-    double closestZ = Math.max(box.getMinZ(), Math.min(point.z, box.getMaxZ()));
+  private double calculateRaytraceDistance(Vector3d position, AABB targetBox, float yaw, float pitch) {
+    double minDistance = Double.MAX_VALUE;
 
-    return new Vector3d(closestX, closestY, closestZ);
+    for (double eyeHeight : POSSIBLE_EYE_HEIGHTS) {
+      Vector3d eye = new Vector3d(
+          position.x,
+          position.y + eyeHeight,
+          position.z
+      );
+
+      Vector3d lookVector = MinecraftMath.getLookVector(yaw, pitch);
+      Vector3d lookEnd = new Vector3d(eye).add(lookVector.mul(RAYTRACE_DISTANCE, new Vector3d()));
+      
+      Vector3d intercept = MinecraftMath.calculateIntercept(targetBox, eye, lookEnd);
+
+      if (intercept != null) {
+        double distance = eye.distance(intercept);
+        minDistance = Math.min(minDistance, distance);
+      }
+    }
+
+    return minDistance;
   }
 
   private boolean shouldSchedule(PacketTypeCommon packetType) {
