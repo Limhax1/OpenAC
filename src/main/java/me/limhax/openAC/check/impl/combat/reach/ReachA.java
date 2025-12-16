@@ -9,12 +9,12 @@ import me.limhax.openAC.processor.TrackingProcessor;
 import me.limhax.openAC.util.AABB;
 import me.limhax.openAC.util.Packet;
 
-@CheckInfo(name = "Reach", type = "A", description = "Hit from too far.", experimental = true)
-public class Reach extends Check {
+@CheckInfo(name = "Reach", type = "A", description = "Hit from too far.", experimental = false)
+public class ReachA extends Check {
 
   private static final double[] POSSIBLE_EYE_HEIGHTS = {1.62, 1.27, 0.4};
 
-  public Reach(PlayerData data) {
+  public ReachA(PlayerData data) {
     super(data);
   }
 

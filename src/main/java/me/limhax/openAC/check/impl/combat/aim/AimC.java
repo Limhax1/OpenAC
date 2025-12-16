@@ -5,6 +5,7 @@ import me.limhax.openAC.check.Check;
 import me.limhax.openAC.check.annotation.CheckInfo;
 import me.limhax.openAC.data.PlayerData;
 import me.limhax.openAC.util.Packet;
+import me.limhax.openAC.util.SamplesBuffer;
 
 @CheckInfo(name = "Aim", type = "C", description = "Repeated pitch values.", experimental = true)
 public class AimC extends Check {

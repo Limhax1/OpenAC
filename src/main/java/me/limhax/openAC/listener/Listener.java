@@ -24,7 +24,9 @@ public class Listener extends PacketListenerAbstract implements org.bukkit.event
   public void onPacketReceive(PacketReceiveEvent event) {
     Player player = event.getPlayer();
     if (player == null) return;
-
+    if (!EntityUtils.getPlayers().contains(player)) {
+      EntityUtils.addPlayer(event.getPlayer());
+    }
     if (playerDataMap.containsKey(player.getEntityId())) {
       PlayerData data = playerDataMap.get(player.getEntityId());
       data.onReceive(event);
@@ -38,15 +40,14 @@ public class Listener extends PacketListenerAbstract implements org.bukkit.event
   public void onPacketSend(PacketSendEvent event) {
     Player player = event.getPlayer();
     if (player == null) return;
-
+    if (!EntityUtils.getPlayers().contains(player)) {
+      EntityUtils.addPlayer(event.getPlayer());
+    }
     if (playerDataMap.containsKey(player.getEntityId())) {
       PlayerData data = playerDataMap.get(player.getEntityId());
       data.onSend(event);
     } else {
       PlayerData data = new PlayerData(player);
-      if (!EntityUtils.getPlayers().contains(player)) {
-        EntityUtils.addPlayer(event.getPlayer());
-      }
       playerDataMap.put(player.getEntityId(), data);
     }
   }

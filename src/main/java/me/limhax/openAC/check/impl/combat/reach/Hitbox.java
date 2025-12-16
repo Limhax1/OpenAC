@@ -15,7 +15,7 @@ import org.joml.Vector3d;
 import java.util.HashMap;
 import java.util.Map;
 
-@CheckInfo(name = "Hitbox", type = "A", description = "Invalid hit angle.", experimental = true)
+@CheckInfo(name = "Hitbox", type = "A", description = "Invalid hit angle.", experimental = false)
 public class Hitbox extends Check {
 
   private final static double[] possibleEyeHeights = {1.62F, 1.27F, 0.4F};

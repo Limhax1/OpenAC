@@ -30,7 +30,7 @@ public class AimA extends Check {
         fail("deltaYaw=" + deltaYaw + " deltaPitch=" + deltaPitch);
       }
     } else {
-      decreaseBufferBy(0.2);
+      decreaseBufferBy(0.45);
     }
   }
 }

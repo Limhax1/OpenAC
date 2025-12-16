@@ -8,16 +8,14 @@ import me.limhax.openAC.check.annotation.CheckInfo;
 import me.limhax.openAC.data.PlayerData;
 import me.limhax.openAC.processor.TrackingProcessor;
 import me.limhax.openAC.util.AABB;
-import me.limhax.openAC.util.Debug;
 import me.limhax.openAC.util.MinecraftMath;
 import me.limhax.openAC.util.Packet;
-import org.bukkit.ChatColor;
 import org.joml.Vector3d;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@CheckInfo(name = "Reach", type = "B", description = "Hit from too far.", experimental = true)
+@CheckInfo(name = "Reach", type = "B", description = "Hit from too far.", experimental = false)
 public class ReachB extends Check {
 
   private static final double[] POSSIBLE_EYE_HEIGHTS = {1.62, 1.27, 0.4};
