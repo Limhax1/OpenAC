@@ -71,7 +71,7 @@ public class TrackingProcessor {
   }
 
   private void addEntity(Vector3d position, int entityId) {
-    if (!tracked.containsKey(entityId) && EntityUtils.getPlayerByEntityId(entityId) != null) {
+    if (!tracked.containsKey(entityId) /*&& EntityUtils.getPlayerByEntityId(entityId) != null*/) {
       tracked.put(entityId, new TrackedEntity(entityId, position));
     }
   }

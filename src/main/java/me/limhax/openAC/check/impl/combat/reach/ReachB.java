@@ -10,6 +10,7 @@ import me.limhax.openAC.processor.TrackingProcessor;
 import me.limhax.openAC.util.AABB;
 import me.limhax.openAC.util.MinecraftMath;
 import me.limhax.openAC.util.Packet;
+import org.bukkit.GameMode;
 import org.joml.Vector3d;
 
 import java.util.HashMap;
@@ -81,7 +82,7 @@ public class ReachB extends Check {
       );
       minDistance = Math.min(minDistance, lastDistance);
 
-      if (minDistance > MAX_REACH && minDistance != Double.MAX_VALUE) {
+      if (minDistance > (data.getPlayer().getGameMode().equals(GameMode.CREATIVE) ? 6 : 3) && minDistance != Double.MAX_VALUE) {
         //Debug.debug(ChatColor.GREEN + "distance=" + minDistance);
         if (increaseBuffer(1, 1)) {
           fail("distance=" + minDistance);

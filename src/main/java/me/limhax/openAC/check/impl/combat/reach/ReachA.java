@@ -8,6 +8,8 @@ import me.limhax.openAC.data.PlayerData;
 import me.limhax.openAC.processor.TrackingProcessor;
 import me.limhax.openAC.util.AABB;
 import me.limhax.openAC.util.Packet;
+import org.bukkit.GameMode;
+import org.bukkit.entity.Damageable;
 
 @CheckInfo(name = "Reach", type = "A", description = "Hit from too far.", experimental = false)
 public class ReachA extends Check {
@@ -27,9 +29,8 @@ public class ReachA extends Check {
       int entityId = wrapper.getEntityId();
       TrackingProcessor.TrackedEntity entry = data.getEntityTracker().getTracked().get(entityId);
       if (entry == null) return;
-
       if (isImpossible(entry)) {
-        event.setCancelled(true);
+        //event.setCancelled(true);
       }
     }
   }
@@ -43,7 +44,7 @@ public class ReachA extends Check {
     double cz = data.getMovementProcessor().getZ();
     double min = getMinimumDistance(cx, cy, cz, entry);
 
-    if (min > 3D) {
+    if (min > (data.getPlayer().getGameMode().equals(GameMode.CREATIVE) ? 6 : 3)) {
       if (increaseBuffer(1, 1)) {
         fail("distance=" + min);
       } else {
